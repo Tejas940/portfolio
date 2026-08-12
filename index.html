@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tejas Kumar — Agentic AI / ML Engineer</title>
+<meta name="description" content="Agentic AI, GenAI and ML Engineer building governed, production AI systems for regulated industries — LangGraph orchestration, RAG platforms, human-in-the-loop workflows on Azure and AWS.">
+<meta property="og:title" content="Tejas Kumar — Agentic AI / ML Engineer">
+<meta property="og:description" content="Governed, production AI systems for banking and healthcare — agents advise, deterministic code decides, a human acts.">
+<meta name="theme-color" content="#0B0F14">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0B0F14;
+  --surface:#111820;
+  --surface2:#0E141B;
+  --line:#1E2833;
+  --text:#E6EDF3;
+  --muted:#8B98A5;
+  --amber:#FFB224;   /* human decision */
+  --blue:#5CC8FF;    /* agent advisory */
+  --font-display:'Space Grotesk',sans-serif;
+  --font-mono:'IBM Plex Mono',monospace;
+  --font-body:'Inter',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-height:1.6;overflow-x:hidden}
+::selection{background:var(--amber);color:#0B0F14}
+
+/* ---------- utilities ---------- */
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+.eyebrow{font-family:var(--font-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.eyebrow .tick{color:var(--amber)}
+h2.section-title{font-family:var(--font-display);font-weight:700;font-size:clamp(30px,4.6vw,52px);line-height:1.05;letter-spacing:-.01em;margin:14px 0 40px}
+section{padding:110px 0;border-top:1px solid var(--line)}
+a{color:inherit}
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .reveal{opacity:1;transform:none;transition:none}
+  .marquee-track{animation:none!important}
+  .flow-dot{display:none}
+  .cursor-blink{animation:none}
+}
+
+/* ---------- nav ---------- */
+nav{position:fixed;top:0;left:0;right:0;z-index:50;background:rgba(11,15,20,.82);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:60px}
+.nav-name{font-family:var(--font-mono);font-size:13px;letter-spacing:.08em;text-decoration:none}
+.nav-name b{color:var(--amber)}
+.nav-links{display:flex;gap:26px;list-style:none}
+.nav-links a{font-family:var(--font-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover,.nav-links a:focus-visible{color:var(--amber)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
+@media(max-width:760px){.nav-links{display:none}}
+
+/* ---------- hero ---------- */
+.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding:120px 0 70px;border-top:none;position:relative}
+.hero-grid-bg{position:absolute;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:56px 56px;opacity:.24;mask-image:radial-gradient(ellipse 80% 65% at 50% 35%,#000 30%,transparent 75%)}
+.hero .wrap{position:relative}
+.hero-tag{display:flex;align-items:center;justify-content:center;gap:12px;margin:0 auto 26px;width:max-content;max-width:100%;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:10px 20px}
+.hero-photo{width:clamp(104px,13vw,148px);height:clamp(104px,13vw,148px);border-radius:50%;object-fit:cover;border:1px solid var(--line);outline:2px solid var(--amber);outline-offset:4px;margin:0 auto 16px;display:block}
+.hero-badge{display:inline-flex;align-items:center;gap:10px;font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--text);border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:8px 18px;margin-bottom:26px}
+.hero-badge .dot{width:8px;height:8px;border-radius:50%;background:var(--amber);box-shadow:0 0 12px var(--amber);animation:pulse 2.2s infinite}
+#roleCycle{display:inline-block;min-width:2ch}
+#roleCycle::after{content:"";display:inline-block;width:.5em;height:.9em;margin-left:3px;background:var(--amber);vertical-align:middle;animation:blink 1s steps(1) infinite}
+.hero .wrap{text-align:center}
+.hero h1{text-align:center}
+.hero-doctrine{margin-left:auto;margin-right:auto;text-align:center}
+.hero-ctas{justify-content:center}
+.hero .stats{text-align:left}
+.hero-tag .dot{width:8px;height:8px;border-radius:50%;background:var(--amber);box-shadow:0 0 12px var(--amber);animation:pulse 2.2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+h1{font-family:var(--font-display);font-weight:700;font-size:clamp(52px,10.5vw,132px);line-height:.94;letter-spacing:-.02em;text-transform:uppercase}
+h1 .row2{color:transparent;-webkit-text-stroke:1.5px var(--text)}
+.hero-doctrine{margin-top:34px;max-width:640px;font-size:clamp(16px,2vw,19px);color:var(--muted)}
+.hero-doctrine b{color:var(--text);font-weight:600}
+.hero-doctrine .a{color:var(--blue)}
+.hero-doctrine .h{color:var(--amber)}
+.hero-ctas{display:flex;gap:16px;margin-top:40px;flex-wrap:wrap}
+.btn{font-family:var(--font-mono);font-size:13px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;padding:14px 26px;border:1px solid var(--line);transition:all .2s}
+.btn-primary{background:var(--amber);border-color:var(--amber);color:#0B0F14;font-weight:500}
+.btn-primary:hover{box-shadow:0 0 26px rgba(255,178,36,.35)}
+.btn-ghost:hover{border-color:var(--amber);color:var(--amber)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:72px}
+.stat{background:var(--bg);padding:26px 22px}
+.stat .num{font-family:var(--font-display);font-weight:700;font-size:clamp(30px,4vw,44px);color:var(--amber)}
+.stat .lbl{font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:6px}
+@media(max-width:760px){.stats{grid-template-columns:1fr 1fr}}
+.cursor-blink{display:inline-block;width:.55em;height:.06em;background:var(--amber);vertical-align:baseline;margin-left:6px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+
+/* ---------- fig.01 pipeline ---------- */
+.fig{padding-top:90px}
+.fig-caption{max-width:680px;color:var(--muted);margin-bottom:44px}
+.pipeline{border:1px solid var(--line);background:var(--surface2);padding:38px 28px;position:relative;overflow:hidden}
+.pipeline-head{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:34px}
+.pipeline-head b{color:var(--text)}
+.pipe-flow{display:flex;flex-direction:column;align-items:center;position:relative}
+.pnode{width:min(440px,100%);border:1px solid var(--line);background:var(--surface);padding:16px 18px;text-align:center;cursor:pointer;transition:border-color .2s,transform .2s;position:relative;z-index:1}
+.pnode::before,.pnode::after{content:'';position:absolute;left:50%;transform:translateX(-50%);width:8px;height:8px;border-radius:50%;background:var(--bg);border:2px solid #33465a;z-index:2}
+.pnode::before{top:-5px}.pnode::after{bottom:-5px}
+.pnode.agent::before,.pnode.agent::after{border-color:var(--blue)}
+.pnode.human::before,.pnode.human::after{border-color:var(--amber)}
+.pconn{width:0;height:38px;border-left:2px dashed #33465a}
+.ploop{position:absolute;top:34px;bottom:34px;left:50%;right:22px;border:2px dashed #33465a;border-left:none;opacity:.5;pointer-events:none;z-index:0}
+.loop-label{position:absolute;right:0;top:50%;transform:translate(50%,-50%) rotate(90deg);font-family:var(--font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);background:var(--surface2);padding:4px 12px;white-space:nowrap}
+.pnode:hover{transform:translateY(-3px)}
+.pnode .pn-title{font-family:var(--font-mono);font-size:12px;letter-spacing:.06em;font-weight:500}
+.pnode .pn-sub{font-family:var(--font-mono);font-size:10px;color:var(--muted);margin-top:5px;letter-spacing:.04em}
+.pnode.agent{border-top:2px solid var(--blue)}
+.pnode.agent .pn-title{color:var(--blue)}
+.pnode.human{border-top:2px solid var(--amber)}
+.pnode.human .pn-title{color:var(--amber)}
+.pnode.active{border-color:var(--amber)}
+.pipe-detail{margin-top:26px;border-top:1px dashed var(--line);padding-top:20px;font-size:15px;color:var(--muted);min-height:54px}
+.pipe-detail b{color:var(--text)}
+.legend{display:flex;gap:26px;margin-top:20px;font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);flex-wrap:wrap}
+.legend .sw{display:inline-block;width:10px;height:10px;margin-right:8px;vertical-align:middle}
+.flow-dot{position:absolute;top:0;left:0;width:7px;height:7px;border-radius:50%;background:var(--amber);box-shadow:0 0 10px var(--amber);opacity:0;pointer-events:none}
+@media(max-width:900px){.ploop{display:none}.pconn{height:26px}}
+
+/* ---------- profile ---------- */
+.profile-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:64px}
+.profile-copy p{font-size:clamp(16px,1.9vw,19px);color:var(--muted);margin-bottom:22px}
+.profile-copy p b{color:var(--text);font-weight:600}
+.fact-list{border:1px solid var(--line)}
+.fact{display:flex;justify-content:space-between;gap:16px;padding:17px 20px;border-bottom:1px solid var(--line);font-size:14px}
+.fact:last-child{border-bottom:none}
+.fact .k{font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding-top:2px;white-space:nowrap}
+.fact .v{text-align:right}
+.fact .v a{color:var(--amber);text-decoration:none}
+.fact .v a:hover{text-decoration:underline}
+@media(max-width:860px){.profile-grid{grid-template-columns:1fr}}
+
+/* ---------- stack marquee ---------- */
+.stack-section{padding:90px 0}
+.marquee{overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:22px 0;margin-top:8px}
+.marquee+.marquee{border-top:none}
+.marquee-track{display:flex;gap:14px;width:max-content;animation:scroll 42s linear infinite}
+.marquee.rev .marquee-track{animation-name:scroll-rev}
+@keyframes scroll{to{transform:translateX(-50%)}}
+@keyframes scroll-rev{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+.chip{font-family:var(--font-mono);font-size:13px;letter-spacing:.04em;padding:9px 16px;border:1px solid var(--line);color:var(--muted);white-space:nowrap;transition:all .2s}
+.chip:hover{color:var(--amber);border-color:var(--amber)}
+
+/* ---------- systems / projects ---------- */
+.proj{border:1px solid var(--line);background:var(--surface2);margin-bottom:26px;padding:34px 30px;transition:border-color .25s}
+.proj:hover{border-color:#33465a}
+.proj-top{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:12px}
+.proj-cat{font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber)}
+.proj-num{font-family:var(--font-mono);font-size:11px;color:var(--muted)}
+.proj h3{font-family:var(--font-display);font-weight:700;font-size:clamp(21px,2.6vw,28px);line-height:1.2;margin-bottom:12px}
+.proj-desc{color:var(--muted);max-width:760px;margin-bottom:18px}
+.proj-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.tag{font-family:var(--font-mono);font-size:11px;letter-spacing:.04em;padding:5px 11px;background:var(--surface);border:1px solid var(--line);color:var(--muted)}
+.log-toggle{font-family:var(--font-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;background:none;border:none;color:var(--amber);cursor:pointer;padding:4px 0}
+.log-toggle:hover{text-decoration:underline}
+.log{display:none;margin-top:16px;border-left:2px solid var(--line);padding-left:20px}
+.log.open{display:block}
+.log li{list-style:none;color:var(--muted);font-size:14.5px;padding:6px 0;position:relative}
+.log li::before{content:'▸';color:var(--amber);position:absolute;left:-20px}
+
+/* ---------- timeline ---------- */
+.tl-item{display:grid;grid-template-columns:230px 1fr;gap:40px;padding:44px 0;border-bottom:1px solid var(--line)}
+.tl-item:last-child{border-bottom:none}
+.tl-when{font-family:var(--font-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);line-height:1.9}
+.tl-when .now{color:var(--amber)}
+.tl-body h3{font-family:var(--font-display);font-weight:700;font-size:22px}
+.tl-body .role{font-family:var(--font-mono);font-size:13px;color:var(--blue);margin:6px 0 16px;letter-spacing:.04em}
+.tl-body li{list-style:none;color:var(--muted);font-size:15px;padding:5px 0 5px 20px;position:relative}
+.tl-body li::before{content:'—';color:var(--amber);position:absolute;left:0}
+@media(max-width:760px){.tl-item{grid-template-columns:1fr;gap:10px}}
+
+/* ---------- credentials ---------- */
+.cred-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line)}
+.cred{background:var(--bg);padding:30px 26px}
+.cred h4{font-family:var(--font-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);margin-bottom:20px}
+.cred-item{padding:12px 0;border-bottom:1px dashed var(--line)}
+.cred-item:last-child{border-bottom:none}
+.cred-item .t{font-weight:600;font-size:15.5px}
+.cred-item .s{color:var(--muted);font-size:13.5px;margin-top:3px}
+@media(max-width:760px){.cred-grid{grid-template-columns:1fr}}
+
+/* ---------- contact ---------- */
+.contact h2{font-family:var(--font-display);font-weight:700;font-size:clamp(34px,6vw,64px);line-height:1.05;letter-spacing:-.01em}
+.contact-sub{color:var(--muted);max-width:520px;margin:22px 0 40px}
+.contact-links{display:flex;flex-direction:column;gap:14px;font-family:var(--font-mono);font-size:15px}
+.contact-links a{color:var(--text);text-decoration:none;width:max-content;max-width:100%;border-bottom:1px solid var(--line);padding-bottom:3px;transition:all .2s}
+.contact-links a:hover{color:var(--amber);border-color:var(--amber)}
+.contact-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:64px;align-items:start}
+@media(max-width:860px){.contact-grid{grid-template-columns:1fr}}
+.cform{display:flex;flex-direction:column;gap:18px}
+.cform label{font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:8px}
+.cform input,.cform textarea{width:100%;background:var(--surface2);border:1px solid var(--line);color:var(--text);font-family:var(--font-body);font-size:15px;padding:13px 14px;transition:border-color .2s}
+.cform input:focus,.cform textarea:focus{outline:none;border-color:var(--amber)}
+.cform textarea{min-height:140px;resize:vertical}
+.cform button{font-family:var(--font-mono);font-size:13px;letter-spacing:.08em;text-transform:uppercase;background:var(--amber);border:1px solid var(--amber);color:#0B0F14;font-weight:500;padding:14px 26px;cursor:pointer;transition:box-shadow .2s;width:max-content}
+.cform button:hover{box-shadow:0 0 26px rgba(255,178,36,.35)}
+.cform button:disabled{opacity:.6;cursor:wait}
+.cform-status{font-family:var(--font-mono);font-size:13px;min-height:20px}
+.cform-status.ok{color:var(--amber)}
+.cform-status.err{color:#ff6b6b}
+.hp{position:absolute;left:-9999px;opacity:0;height:0;overflow:hidden}
+footer{border-top:1px solid var(--line);padding:26px 0;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+footer a{color:var(--muted);text-decoration:none}
+footer a:hover{color:var(--amber)}
+
+/* ---------- preloader ---------- */
+.preloader{position:fixed;inset:0;z-index:100;background:var(--bg);display:flex;align-items:flex-end;justify-content:space-between;padding:clamp(24px,5vw,56px);transition:opacity .45s ease}
+.preloader.done{opacity:0;pointer-events:none}
+.pl-name{font-family:var(--font-display);font-weight:700;font-size:clamp(26px,4vw,44px);line-height:1.05;text-transform:uppercase;letter-spacing:-.01em}
+.pl-name span{color:transparent;-webkit-text-stroke:1px var(--text)}
+.pl-count{font-family:var(--font-mono);font-weight:500;font-size:clamp(40px,8vw,88px);line-height:1}
+.pl-count b{color:var(--amber);font-weight:500}
+@media (prefers-reduced-motion:reduce){.preloader{display:none}}
+
+/* ---------- chat widget ---------- */
+.chat-fab{position:fixed;bottom:24px;right:24px;z-index:60;width:58px;height:58px;border-radius:50%;background:var(--amber);border:1px solid var(--amber);color:#0B0F14;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 6px 24px rgba(0,0,0,.45)}
+.chat-fab svg{width:26px;height:26px}
+.chat-fab .fab-dot{position:absolute;top:4px;right:4px;width:10px;height:10px;border-radius:50%;background:#0B0F14;border:2px solid var(--amber);animation:pulse 2.2s infinite}
+.chat-fab:hover{box-shadow:0 0 26px rgba(255,178,36,.4)}
+.chat-panel{position:fixed;bottom:24px;right:24px;z-index:61;width:min(380px,calc(100vw - 32px));height:min(520px,calc(100svh - 60px));background:var(--surface2);border:1px solid var(--line);display:none;flex-direction:column;box-shadow:0 12px 48px rgba(0,0,0,.55)}
+.chat-panel.open{display:flex}
+.chat-head{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line)}
+.chat-head .t{font-family:var(--font-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase}
+.chat-head .t b{color:var(--amber)}
+.chat-close{background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;line-height:1}
+.chat-close:hover{color:var(--amber)}
+.chat-msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
+.cmsg{max-width:85%;padding:10px 13px;font-size:14px;line-height:1.5;white-space:pre-wrap}
+.cmsg.bot{background:var(--surface);border:1px solid var(--line);align-self:flex-start}
+.cmsg.user{background:var(--amber);color:#0B0F14;align-self:flex-end}
+.chat-note{font-family:var(--font-mono);font-size:10px;color:var(--muted);padding:0 16px 8px;letter-spacing:.04em}
+.chat-sugg{display:flex;flex-wrap:wrap;gap:8px;padding:4px 16px 10px}
+.chat-sugg button{font-family:var(--font-mono);font-size:11.5px;letter-spacing:.02em;background:var(--surface);border:1px solid var(--line);color:var(--muted);padding:8px 12px;border-radius:999px;cursor:pointer;transition:all .2s}
+.chat-sugg button:hover{color:var(--amber);border-color:var(--amber)}
+.chat-inrow{display:flex;gap:8px;padding:12px 16px;border-top:1px solid var(--line)}
+.chat-inrow input{flex:1;background:var(--surface);border:1px solid var(--line);color:var(--text);font-family:var(--font-body);font-size:14px;padding:11px 12px}
+.chat-inrow input:focus{outline:none;border-color:var(--amber)}
+.chat-inrow button{font-family:var(--font-mono);font-size:12px;text-transform:uppercase;letter-spacing:.06em;background:var(--amber);border:1px solid var(--amber);color:#0B0F14;padding:0 16px;cursor:pointer;font-weight:500}
+.chat-inrow button:disabled{opacity:.5;cursor:wait}
+
+</style>
+</head>
+<body>
+
+<div class="preloader" id="preloader" aria-hidden="true">
+  <div class="pl-name">Tejas<br><span>Kumar</span></div>
+  <div class="pl-count"><span id="plNum">0</span><b>%</b></div>
+</div>
+
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-name" href="#top">TEJAS<b>_</b>KUMAR</a>
+    <ul class="nav-links">
+      <li><a href="#profile">Profile</a></li>
+      <li><a href="#stack">Stack</a></li>
+      <li><a href="#systems">Systems</a></li>
+      <li><a href="#timeline">Timeline</a></li>
+      <li><a href="#" id="navAssistant">Assistant</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ================= HERO ================= -->
+<header class="hero" id="top">
+  <div class="hero-grid-bg" aria-hidden="true"></div>
+  <div class="wrap">
+    <img class="hero-photo" src="headshot.jpg" alt="Tejas Kumar" width="800" height="885">
+    <div><span class="hero-badge"><span class="dot" aria-hidden="true"></span>Open to contract roles</span></div>
+    <div class="hero-tag">
+      <span class="eyebrow"><span id="roleCycle">Agentic AI Engineer</span> <span class="tick">//</span> USA</span>
+    </div>
+    <h1>Tejas<br><span class="row2">Kumar</span><span class="cursor-blink" aria-hidden="true"></span></h1>
+    <p class="hero-doctrine">
+      I build governed AI systems for regulated industries — banking, healthcare, finance.
+      My operating doctrine: <b><span class="a">agents advise</span>, deterministic code decides,
+      <span class="h">a human acts</span></b>. Nine years of shipping ML, NLP, RAG and agentic
+      workflows into production on Azure and AWS.
+    </p>
+    <div class="hero-ctas">
+      <a class="btn btn-primary" href="#systems">Explore systems ↓</a>
+      <a class="btn btn-ghost" href="#contact">Get in touch</a>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="num" data-count="9" data-suffix="+">0</div><div class="lbl">Years shipping AI/ML</div></div>
+      <div class="stat"><div class="num" data-count="4">0</div><div class="lbl">Regulated industries</div></div>
+      <div class="stat"><div class="num" data-count="5">0</div><div class="lbl">Production systems</div></div>
+      <div class="stat"><div class="num" data-count="3">0</div><div class="lbl">Clouds — Azure · AWS · GCP</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ================= FIG.01 PIPELINE ================= -->
+<section class="fig" id="fig01">
+  <div class="wrap">
+    <span class="eyebrow reveal">fig.01 <span class="tick">//</span> signature system</span>
+    <h2 class="section-title reveal">Anatomy of a governed<br>agentic workflow.</h2>
+    <p class="fig-caption reveal">
+      A governed agentic-workflow pattern from my banking work — shown as a reference architecture, drawn the way it actually runs:
+      AI Foundry agents write advisories, a deterministic rule makes the call, and every case ends
+      at exactly one human gate. No agent moves money. Tap a node to see its job.
+    </p>
+    <div class="pipeline reveal" id="pipeline">
+      <div class="pipeline-head">
+        <span>governed agentic workflow · <b>reference architecture</b></span>
+        <span>langgraph × azure ai foundry × n8n</span>
+      </div>
+      <div class="pipe-flow" id="pipeRow">
+        <div class="ploop" aria-hidden="true"><span class="loop-label">audit trail ↺</span></div>
+        <div class="pnode" data-d="<b>Case intake.</b> An n8n workflow receives the triggering event, opens the case and hands case data to the LangGraph orchestration service over REST."><div class="pn-title">CASE INTAKE</div><div class="pn-sub">n8n · FastAPI</div></div>
+        <div class="pconn" aria-hidden="true"></div>
+        <div class="pnode agent" data-d="<b>Transaction-stop agent (advisory).</b> An Azure AI Foundry agent reviews every transaction on the account and issues STOP or REVIEW advisories — it recommends, it never executes."><div class="pn-title">STOP AGENT</div><div class="pn-sub">advises</div></div>
+        <div class="pconn" aria-hidden="true"></div>
+        <div class="pnode agent" data-d="<b>Profile agent (advisory).</b> A second Foundry agent drafts the two-line account-status completion report for the case file."><div class="pn-title">PROFILE AGENT</div><div class="pn-sub">advises</div></div>
+        <div class="pconn" aria-hidden="true"></div>
+        <div class="pnode" data-d="<b>Deterministic rule.</b> Plain Python — the single source of truth. It flags uncoded transactions and status conflicts. The agents inform it; they cannot override it."><div class="pn-title">DECISION RULE</div><div class="pn-sub">python · decides</div></div>
+        <div class="pconn" aria-hidden="true"></div>
+        <div class="pnode human" data-d="<b>Human gate.</b> Every flagged case routes to a person with the agents' advisories attached as context. The human makes the final call — by design, not as a fallback."><div class="pn-title">HUMAN GATE</div><div class="pn-sub">acts</div></div>
+        <div class="pconn" aria-hidden="true"></div>
+        <div class="pnode" data-d="<b>Execution & audit.</b> n8n runs the approved steps — downstream documents, notifications, system updates — and logs the full decision trail for audit."><div class="pn-title">EXECUTE</div><div class="pn-sub">n8n · audited</div></div>
+      </div>
+      <div class="pipe-detail" id="pipeDetail">tap a node to see what it does here</div>
+      <div class="legend">
+        <span><span class="sw" style="background:var(--blue)"></span>agent — advisory only</span>
+        <span><span class="sw" style="background:var(--amber)"></span>human — final authority</span>
+      </div>
+      <div class="flow-dot" id="flowDot" aria-hidden="true"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PROFILE ================= -->
+<section id="profile">
+  <div class="wrap">
+    <span class="eyebrow reveal">profile <span class="tick">//</span> 02</span>
+    <h2 class="section-title reveal">Production AI, with the<br>guardrails built in.</h2>
+    <div class="profile-grid">
+      <div class="profile-copy reveal">
+        <p>I'm an AI/ML engineer who has spent nine years taking models out of notebooks and into
+        <b>production systems that enterprises actually trust</b> — across banking, healthcare,
+        finance and utilities.</p>
+        <p>Right now, at <b>Citizens Bank</b>, I design agentic AI for banking operations:
+        LangGraph orchestration, Azure AI Foundry agents, semantic search over enterprise
+        knowledge, and the governance layer around all of it — prompt validation, structured
+        outputs, audit logging, behavior monitoring.</p>
+        <p>Before that I built RAG and document-intelligence platforms for <b>Cigna</b>,
+        ML services for financial analytics at <b>Deloitte</b>, and NLP systems for
+        <b>Duke Energy</b> at Accenture. The common thread: AI that holds up under
+        regulation, audit and real operational load.</p>
+      </div>
+      <div class="fact-list reveal">
+        <div class="fact"><span class="k">Location</span><span class="v">United States</span></div>
+        <div class="fact"><span class="k">Currently</span><span class="v">Agentic AI Engineer<br>Citizens Bank</span></div>
+        <div class="fact"><span class="k">Focus</span><span class="v">Agentic systems · RAG<br>AI governance · MLOps</span></div>
+        <div class="fact"><span class="k">Education</span><span class="v">M.S. Computers & Info. Science<br>Southern Arkansas University</span></div>
+        <div class="fact"><span class="k">Email</span><span class="v"><a href="mailto:tejaskumar2096@gmail.com">tejaskumar2096@gmail.com</a></span></div>
+        <div class="fact"><span class="k">LinkedIn</span><span class="v"><a href="https://www.linkedin.com/in/actejas" target="_blank" rel="noopener">linkedin.com/in/actejas</a></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= STACK ================= -->
+<section class="stack-section" id="stack">
+  <div class="wrap">
+    <span class="eyebrow reveal">stack <span class="tick">//</span> 03</span>
+    <h2 class="section-title reveal">Technology core.</h2>
+  </div>
+  <div class="marquee"><div class="marquee-track" id="mq1"></div></div>
+  <div class="marquee rev"><div class="marquee-track" id="mq2"></div></div>
+</section>
+
+<!-- ================= SYSTEMS ================= -->
+<section id="systems">
+  <div class="wrap">
+    <span class="eyebrow reveal">systems <span class="tick">//</span> 04</span>
+    <h2 class="section-title reveal">Systems I've shipped.</h2>
+    <p class="fig-caption reveal" style="margin-top:-24px">All projects are shown at the pattern level — nothing here includes employer code, data, or confidential information.</p>
+
+    <article class="proj reveal" id="sys01">
+      <div class="proj-top"><span class="proj-cat">Banking · Agentic AI</span><span class="proj-num">sys.01</span></div>
+      <h3>Agentic Workflow Automation for High-Stakes Banking Operations</h3>
+      <p class="proj-desc">A reference architecture for end-to-end agentic banking workflows: n8n intake, LangGraph orchestration,
+      Azure AI Foundry advisory agents, a deterministic decision rule and a mandatory human gate —
+      the pattern drawn in fig.01, proven end to end with monitoring.</p>
+      <div class="proj-tags"><span class="tag">LangGraph</span><span class="tag">Azure AI Foundry</span><span class="tag">n8n</span><span class="tag">FastAPI</span><span class="tag">Python</span><span class="tag">Human-in-the-Loop</span></div>
+      <button class="log-toggle" aria-expanded="false">+ open log</button>
+      <ul class="log">
+        <li>Designed the governance doctrine: agents advise, deterministic code decides, a human acts — no agent touches money.</li>
+        <li>Built two advisory Foundry agents (transaction review, account status) provisioned once via script, invoked from LangGraph.</li>
+        <li>Implemented the single-source-of-truth decision rule flagging uncoded transactions and account-status conflicts.</li>
+        <li>Wired business-readable n8n stages from intake to final document preparation with one merged human-decision node.</li>
+        <li>Exposed the orchestration as a FastAPI service with a clean 5-dependency footprint, ready for Azure Container Apps.</li>
+      </ul>
+    </article>
+
+    <article class="proj reveal" id="sys02">
+      <div class="proj-top"><span class="proj-cat">Banking · RAG · Live in production</span><span class="proj-num">sys.02</span></div>
+      <h3>Enterprise RAG &amp; Semantic Search Platform</h3>
+      <p class="proj-desc">Operations teams deal with large volumes of documents, policies and backend
+      information — much of it searched and validated manually. This platform is the intelligent retrieval
+      layer: enterprise documents ingested, embedded and served through semantic search and RAG, so LLM
+      answers are grounded in the bank's own knowledge instead of model memory. Deployed and running in
+      production.</p>
+      <div class="proj-tags"><span class="tag">Azure AI Search</span><span class="tag">RAG</span><span class="tag">Embeddings</span><span class="tag">Azure OpenAI</span><span class="tag">LangChain</span><span class="tag">Redis</span></div>
+      <button class="log-toggle" aria-expanded="false">+ open log</button>
+      <ul class="log">
+        <li>Built the full pipeline — document ingestion → embeddings → vector retrieval — grounding LLM responses in enterprise knowledge.</li>
+        <li>Human-in-the-loop controls on sensitive decision points: the model informs, people decide.</li>
+        <li>Implemented governance controls: prompt validation, structured outputs, audit logging, behavior monitoring.</li>
+        <li>Optimized document-intelligence workflows through prompt engineering and retrieval tuning.</li>
+        <li>Deployed as distributed microservices on Docker, Kubernetes and Azure Container Apps.</li>
+        <li>Instrumented with Azure Monitor, Application Insights, LangSmith and LangFuse.</li>
+      </ul>
+    </article>
+
+    <article class="proj reveal" id="sys03">
+      <div class="proj-top"><span class="proj-cat">Healthcare · RAG</span><span class="proj-num">sys.03</span></div>
+      <h3>Healthcare Knowledge & Document Intelligence</h3>
+      <p class="proj-desc">Production AI services for a major health insurer — semantic search, intelligent
+      document processing and predictive analytics, deployed with full MLOps lifecycle management across
+      regulated healthcare systems.</p>
+      <div class="proj-tags"><span class="tag">Python</span><span class="tag">FastAPI</span><span class="tag">Pinecone</span><span class="tag">FAISS</span><span class="tag">MLflow</span><span class="tag">Kubernetes</span></div>
+      <button class="log-toggle" aria-expanded="false">+ open log</button>
+      <ul class="log">
+        <li>Built enterprise semantic search with vector embeddings, Pinecone, FAISS and Azure AI Search.</li>
+        <li>Shipped ML models and intelligent search as scalable Python + FastAPI microservices.</li>
+        <li>Implemented AI governance: model validation, documentation, auditability and responsible-AI deployment.</li>
+        <li>Automated deployment pipelines with Docker, Kubernetes, MLflow, GitHub Actions and Azure ML.</li>
+        <li>Improved workflow accuracy via prompt engineering, retrieval optimization and production monitoring.</li>
+      </ul>
+    </article>
+
+    <article class="proj reveal" id="sys04">
+      <div class="proj-top"><span class="proj-cat">Desktop tooling · Solo build</span><span class="proj-num">sys.04</span></div>
+      <h3>PDF Editor — Make Any PDF Editable</h3>
+      <p class="proj-desc">A desktop application that opens any PDF and makes it directly editable —
+      click-to-edit text overlay, drag-to-create text boxes, and save-through with the original file as
+      the source of truth. Built solo, end to end, with an AI-assisted development workflow.</p>
+      <div class="proj-tags"><span class="tag">Python</span><span class="tag">Desktop GUI</span><span class="tag">PDF engine</span><span class="tag">Automated tests</span></div>
+      <button class="log-toggle" aria-expanded="false">+ open log</button>
+      <ul class="log">
+        <li>Click-to-edit overlay on rendered pages plus drag-to-create text boxes anywhere on the document.</li>
+        <li>Save-through pipeline that writes edits back to a valid PDF and preserves page rotation flags.</li>
+        <li>Graceful degradation by design: font look-alike fallback for missing glyphs, shrink-to-fit for overlong text.</li>
+        <li>51 automated checks across the engine and GUI — load, edit, save, dirty-state and folder handling.</li>
+        <li>Honest limitations documented in the README, including a deliberate no-OCR scope decision.</li>
+      </ul>
+    </article>
+
+    <article class="proj reveal" id="sys05">
+      <div class="proj-top"><span class="proj-cat">Utilities · NLP & Predictive ML</span><span class="proj-num">sys.05</span></div>
+      <h3>Customer NLP & Predictive Maintenance</h3>
+      <p class="proj-desc">Enterprise NLP and ML for a major US utility — complaint classification, intent
+      detection and equipment-failure prediction feeding customer service and maintenance planning across
+      operational systems.</p>
+      <div class="proj-tags"><span class="tag">TensorFlow</span><span class="tag">Scikit-learn</span><span class="tag">spaCy</span><span class="tag">Flask</span><span class="tag">AWS</span><span class="tag">Docker</span></div>
+      <button class="log-toggle" aria-expanded="false">+ open log</button>
+      <ul class="log">
+        <li>Production NLP models for complaint classification, intent detection and text analytics.</li>
+        <li>Predictive models identifying equipment failures to improve maintenance planning and asset reliability.</li>
+        <li>REST APIs integrating ML predictions into enterprise customer-service applications.</li>
+        <li>Automated inference workflows supporting real-time operational decisions.</li>
+        <li>End-to-end pipelines: feature engineering, training, validation, deployment, monitoring.</li>
+      </ul>
+    </article>
+  </div>
+</section>
+
+<!-- ================= TIMELINE ================= -->
+<section id="timeline">
+  <div class="wrap">
+    <span class="eyebrow reveal">timeline <span class="tick">//</span> 05</span>
+    <h2 class="section-title reveal">Where I've worked.</h2>
+
+    <div class="tl-item reveal">
+      <div class="tl-when"><span class="now">Aug 2025 — Present</span><br>Richmond, VA</div>
+      <div class="tl-body">
+        <h3>Citizens Bank</h3>
+        <div class="role">Agentic AI Engineer</div>
+        <ul>
+          <li>Built the bank's RAG foundation — Azure AI Search, vector embeddings, Pinecone — deployed and running in production.</li>
+          <li>Now building agentic workflow automation: LangGraph orchestration combined with n8n on Azure AI Foundry.</li>
+          <li>Governance from day one: prompt validation, structured outputs, audit logging, human-in-the-loop checkpoints.</li>
+          <li>Ship Python/FastAPI microservices on Kubernetes and Azure Container Apps via GitHub Actions and Azure DevOps.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tl-item reveal">
+      <div class="tl-when">Sep 2024 — Jul 2025<br>Rhode Island</div>
+      <div class="tl-body">
+        <h3>Cigna</h3>
+        <div class="role">AI Engineer</div>
+        <ul>
+          <li>Built healthcare knowledge management, document intelligence and semantic search platforms.</li>
+          <li>RAG with Pinecone, FAISS and Azure AI Search behind Python/FastAPI microservices.</li>
+          <li>Deployment pipelines with Docker, Kubernetes, MLflow, GitHub Actions and Azure ML.</li>
+          <li>AI governance: validation, documentation, auditability, responsible-AI deployment.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tl-item reveal">
+      <div class="tl-when">Sep 2021 — Dec 2023<br>India</div>
+      <div class="tl-body">
+        <h3>Deloitte</h3>
+        <div class="role">Data Scientist — Securian Financial · Cardinal Health</div>
+        <ul>
+          <li>Production ML on AWS for financial analytics and intelligent automation at Securian Financial.</li>
+          <li>Vector-based semantic retrieval and embedding pipelines — foundational RAG — at Cardinal Health.</li>
+          <li>REST APIs exposing predictive analytics to enterprise platforms; reusable Python ML libraries.</li>
+          <li>Automated ML lifecycle: deployment validation, monitoring, versioning, CI/CD.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tl-item reveal">
+      <div class="tl-when">Nov 2016 — Sep 2021<br>India</div>
+      <div class="tl-body">
+        <h3>Accenture</h3>
+        <div class="role">NLP Engineer / Data Scientist — Duke Energy</div>
+        <ul>
+          <li>Production NLP for complaint classification, intent detection and text analytics.</li>
+          <li>Predictive maintenance models reducing operational downtime for utility assets.</li>
+          <li>Scalable Python data pipelines and RESTful ML services on AWS.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CREDENTIALS ================= -->
+<section id="credentials">
+  <div class="wrap">
+    <span class="eyebrow reveal">credentials <span class="tick">//</span> 06</span>
+    <h2 class="section-title reveal">Education & recognition.</h2>
+    <div class="cred-grid reveal">
+      <div class="cred">
+        <h4>Education</h4>
+        <div class="cred-item">
+          <div class="t">M.S. — Computers & Information Science</div>
+          <div class="s">Southern Arkansas University · 2025</div>
+        </div>
+        <div class="cred-item">
+          <div class="t">B.Tech — Computer Science & Engineering</div>
+          <div class="s">SRM University, Chennai · 2017</div>
+        </div>
+      </div>
+      <div class="cred">
+        <h4>Awards</h4>
+        <div class="cred-item">
+          <div class="t">On the Spot Award</div>
+          <div class="s">Deloitte · May 2023</div>
+        </div>
+        <div class="cred-item">
+          <div class="t">Best Team Player Award</div>
+          <div class="s">Deloitte · Dec 2023</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<section class="contact" id="contact">
+  <div class="wrap">
+    <span class="eyebrow reveal">contact <span class="tick">//</span> 07</span>
+    <h2 class="reveal" style="margin-top:14px">Have a system that<br>needs governing?</h2>
+    <div class="contact-grid">
+      <div>
+        <p class="contact-sub reveal">Open to contract Agentic AI, Generative AI, and AI/ML Engineer roles — remote, hybrid, or onsite. Use the form, or reach me directly.</p>
+        <div class="contact-links reveal">
+          <a href="mailto:tejaskumar2096@gmail.com">tejaskumar2096@gmail.com</a>
+          <a href="tel:+19453541446">+1 945 354 1446</a>
+          <a href="https://www.linkedin.com/in/actejas" target="_blank" rel="noopener">linkedin.com/in/actejas</a>
+        </div>
+      </div>
+      <form class="cform reveal" id="cform" action="https://formspree.io/f/xbgrojzl" method="POST" novalidate>
+        <div>
+          <label for="cf-name">Your name</label>
+          <input id="cf-name" type="text" name="name" required autocomplete="name" placeholder="Alex Carter">
+        </div>
+        <div>
+          <label for="cf-email">Your email</label>
+          <input id="cf-email" type="email" name="email" required autocomplete="email" placeholder="alex@company.com">
+        </div>
+        <div>
+          <label for="cf-msg">Message</label>
+          <textarea id="cf-msg" name="message" required placeholder="Tell me about the role or project…"></textarea>
+        </div>
+        <input type="text" name="_gotcha" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <button type="submit" id="cfBtn">Send message →</button>
+        <p class="cform-status" id="cfStatus" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<button class="chat-fab" id="chatFab" aria-label="Ask Lumen — AI portfolio assistant">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+  <span class="fab-dot" aria-hidden="true"></span>
+</button>
+<div class="chat-panel" id="chatPanel" role="dialog" aria-label="Portfolio assistant">
+  <div class="chat-head">
+    <span class="t">LUMEN<b>_</b>01 <span style="color:var(--muted)">· portfolio assistant</span></span>
+    <button class="chat-close" id="chatClose" aria-label="Close chat">✕</button>
+  </div>
+  <div class="chat-msgs" id="chatMsgs">
+    <div class="cmsg bot">Hi, I'm Lumen — I answer questions about Tejas's experience, projects, and stack. Try "What did he build at Citizens Bank?" For anything needing Tejas himself, use the contact form below.</div>
+  </div>
+  <div class="chat-sugg" id="chatSugg">
+    <button type="button">What did he build at Citizens Bank?</button>
+    <button type="button">Tell me about Tejas's projects</button>
+    <button type="button">What's his tech stack?</button>
+    <button type="button">Is he open to contract roles?</button>
+    <button type="button">Who are you?</button>
+  </div>
+  <div class="chat-note">Lumen · AI assistant · answers from Tejas's profile</div>
+  <div class="chat-inrow">
+    <input id="chatIn" type="text" maxlength="500" placeholder="Ask about experience, projects, stack…">
+    <button id="chatSend">Send</button>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;width:100%">
+    <span>Tejas Kumar © 2026</span>
+    <span>Agentic AI · ML Engineer · USA</span>
+    <a href="#top">Back to top ↑</a>
+  </div>
+</footer>
+
+<script>
+/* ---------- preloader ---------- */
+(function(){
+  const pl=document.getElementById('preloader'),num=document.getElementById('plNum');
+  if(!pl)return;
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches){pl.remove();return}
+  document.documentElement.style.overflow='hidden';
+  let t0=null;const dur=850;
+  function tick(ts){
+    if(!t0)t0=ts;
+    const p=Math.min((ts-t0)/dur,1);
+    num.textContent=Math.round(p*100);
+    if(p<1){requestAnimationFrame(tick)}
+    else{
+      pl.classList.add('done');
+      document.documentElement.style.overflow='';
+      setTimeout(()=>pl.remove(),500);
+    }
+  }
+  requestAnimationFrame(tick);
+})();
+
+/* ---------- typewriter role title ---------- */
+(function(){
+  const el=document.getElementById('roleCycle');if(!el)return;
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const roles=['Agentic AI Engineer','Generative AI Engineer','LLM Solutions Consultant','AI/ML Engineer','Machine Learning Engineer','Data Scientist'];
+  let ri=0, ci=roles[0].length, deleting=true;
+  function tick(){
+    if(deleting){
+      ci--; el.textContent=roles[ri].slice(0,ci)||'\u00A0';
+      if(ci<=0){deleting=false; ri=(ri+1)%roles.length; setTimeout(tick,300); return}
+      setTimeout(tick,28);
+    }else{
+      const w=roles[ri]; ci++; el.textContent=w.slice(0,ci);
+      if(ci>=w.length){deleting=true; setTimeout(tick,1600); return}
+      setTimeout(tick,55);
+    }
+  }
+  setTimeout(tick,1400);
+})();
+
+/* ---------- scroll reveal ---------- */
+const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+/* ---------- stat counters ---------- */
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const cio=new IntersectionObserver(es=>{es.forEach(e=>{
+  if(!e.isIntersecting)return;cio.unobserve(e.target);
+  const el=e.target,end=+el.dataset.count,suf=el.dataset.suffix||'';
+  if(reduced){el.textContent=end+suf;return}
+  let t0=null;const dur=1100;
+  const step=ts=>{if(!t0)t0=ts;const p=Math.min((ts-t0)/dur,1);
+    el.textContent=Math.round(end*p)+(p===1?suf:'');
+    if(p<1)requestAnimationFrame(step)};
+  requestAnimationFrame(step);
+})},{threshold:.5});
+document.querySelectorAll('.stat .num').forEach(el=>cio.observe(el));
+
+/* ---------- stack marquee ---------- */
+const stack=['Python','SQL','LangGraph','LangChain','Azure AI Foundry','Azure OpenAI','RAG','Vector Embeddings','Pinecone','FAISS','Azure AI Search','Multi-Agent Systems','Human-in-the-Loop','Prompt Engineering','AI Governance','FastAPI','Flask','REST APIs','Microservices','Docker','Kubernetes','Azure Container Apps','MLflow','GitHub Actions','CI/CD','AWS','SageMaker','GCP','Vertex AI','TensorFlow','Scikit-learn','NLP','spaCy','PostgreSQL','Redis','MongoDB','Azure Monitor','LangSmith','LangFuse','n8n'];
+function fill(id,arr){const t=document.getElementById(id);
+  const chips=arr.map(s=>`<span class="chip">${s}</span>`).join('');
+  t.innerHTML=chips+chips; /* duplicate for seamless loop */ }
+fill('mq1',stack);
+fill('mq2',[...stack].reverse());
+
+/* ---------- pipeline node details ---------- */
+const detail=document.getElementById('pipeDetail');
+const nodes=document.querySelectorAll('.pnode');
+nodes.forEach(n=>{
+  n.setAttribute('tabindex','0');n.setAttribute('role','button');
+  const act=()=>{nodes.forEach(m=>m.classList.remove('active'));n.classList.add('active');detail.innerHTML=n.dataset.d};
+  n.addEventListener('click',act);
+  n.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();act()}});
+});
+
+/* ---------- flow dot animation along the pipeline ---------- */
+(function(){
+  if(reduced)return;
+  const dot=document.getElementById('flowDot'),pipe=document.getElementById('pipeline');
+  const seq=[...document.querySelectorAll('#pipeRow .pnode')];
+  let i=0;
+  function hop(){
+    const n=seq[i],pr=pipe.getBoundingClientRect(),nr=n.getBoundingClientRect();
+    dot.style.transition='none';dot.style.opacity=1;
+    dot.style.transform=`translate(${nr.left-pr.left+nr.width/2-3}px, ${nr.top-pr.top-12}px)`;
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      const nx=seq[(i+1)%seq.length],nxr=nx.getBoundingClientRect();
+      dot.style.transition='transform .9s ease-in-out';
+      dot.style.transform=`translate(${nxr.left-pr.left+nxr.width/2-3}px, ${nxr.top-pr.top-12}px)`;
+    }));
+    i=(i+1)%seq.length;
+    setTimeout(hop,1400);
+  }
+  setTimeout(hop,800);
+})();
+
+/* ---------- contact form ---------- */
+(function(){
+  const form=document.getElementById('cform');if(!form)return;
+  const btn=document.getElementById('cfBtn'),status=document.getElementById('cfStatus');
+  form.addEventListener('submit',async e=>{
+    e.preventDefault();
+    if(!form.checkValidity()){form.reportValidity();return}
+    btn.disabled=true;status.textContent='sending…';status.className='cform-status';
+    try{
+      const res=await fetch(form.action,{method:'POST',body:new FormData(form),headers:{'Accept':'application/json'}});
+      if(res.ok){form.reset();status.textContent='✓ message sent — I\'ll get back to you soon.';status.className='cform-status ok'}
+      else{throw new Error()}
+    }catch(_){
+      status.textContent='something went wrong — please email me directly.';status.className='cform-status err';
+    }
+    btn.disabled=false;
+  });
+})();
+
+/* ---------- project logs ---------- */
+document.querySelectorAll('.log-toggle').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const log=btn.nextElementSibling,open=log.classList.toggle('open');
+    btn.textContent=open?'– close log':'+ open log';
+    btn.setAttribute('aria-expanded',open);
+  });
+});
+/* ---------- chat widget ---------- */
+(function(){
+  const fab=document.getElementById('chatFab'),panel=document.getElementById('chatPanel'),
+        closeB=document.getElementById('chatClose'),msgs=document.getElementById('chatMsgs'),
+        input=document.getElementById('chatIn'),send=document.getElementById('chatSend');
+  if(!fab)return;
+  const history=[];const MAX_TURNS=12;
+  function openChat(){panel.classList.add('open');fab.style.display='none';input.focus()}
+  fab.addEventListener('click',openChat);
+  const navA=document.getElementById('navAssistant');
+  if(navA)navA.addEventListener('click',e=>{e.preventDefault();openChat()});
+  closeB.addEventListener('click',()=>{panel.classList.remove('open');fab.style.display=''});
+  function add(role,text){
+    const d=document.createElement('div');d.className='cmsg '+(role==='user'?'user':'bot');
+    d.textContent=text;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;return d;
+  }
+  async function ask(){
+    const q=input.value.trim();if(!q||send.disabled)return;
+    if(history.filter(m=>m.role==='user').length>=MAX_TURNS){
+      add('bot','That\'s a good long chat — for anything more, the contact form reaches Tejas directly.');return;
+    }
+    input.value='';add('user',q);history.push({role:'user',content:q});
+    send.disabled=true;const wait=add('bot','…');
+    try{
+      const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:history})});
+      const data=await r.json();
+      if(r.ok&&data.reply){wait.textContent=data.reply;history.push({role:'assistant',content:data.reply})}
+      else{wait.textContent='I hit a snag — try again, or use the contact form to reach Tejas.'}
+    }catch(_){wait.textContent='I hit a snag — try again, or use the contact form to reach Tejas.'}
+    send.disabled=false;msgs.scrollTop=msgs.scrollHeight;
+  }
+  send.addEventListener('click',ask);
+  input.addEventListener('keydown',e=>{if(e.key==='Enter')ask()});
+  const sugg=document.getElementById('chatSugg');
+  if(sugg)sugg.querySelectorAll('button').forEach(b=>{
+    b.addEventListener('click',()=>{input.value=b.textContent;sugg.style.display='none';ask()});
+  });
+})();
+
+</script>
+</body>
+</html>
